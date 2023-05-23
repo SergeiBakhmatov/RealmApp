@@ -77,6 +77,7 @@ final class TasksViewController: UITableViewController {
             isDone(true)
         }
         
+        
         editAction.backgroundColor = .orange
         doneAction.backgroundColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
         
@@ -90,7 +91,7 @@ final class TasksViewController: UITableViewController {
             tableView.reloadRows(at: [indexPath], with: .automatic)
         }
     }
-    
+
     @objc private func addButtonPressed() {
         showAlert()
     }
@@ -129,4 +130,5 @@ extension TasksViewController {
             tableView.insertRows(at: [rowIndex], with: .automatic)
         }
     }
+    
 }
