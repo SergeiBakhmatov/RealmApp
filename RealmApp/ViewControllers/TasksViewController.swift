@@ -58,10 +58,13 @@ final class TasksViewController: UITableViewController {
     // MARK: - UITableViewDelegate
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let task: Task
+        let title: String
         if indexPath.section == 0 {
             task = currentTasks[indexPath.row]
+            title = "Done"
         } else {
             task = completedTasks[indexPath.row]
+            title = "Undone"
         }
         
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [unowned self] _, _, _ in
@@ -76,7 +79,7 @@ final class TasksViewController: UITableViewController {
             isDone(true)
         }
         
-        let doneAction = UIContextualAction(style: .normal, title: "Done") { [unowned self] _, _, isDone in
+        let doneAction = UIContextualAction(style: .normal, title: title) { [unowned self] _, _, isDone in
             storageManager.done(task, taskList) {
                 tableView.reloadData()
             }
