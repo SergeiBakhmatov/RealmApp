@@ -81,7 +81,7 @@ final class TasksViewController: UITableViewController {
         
         let doneAction = UIContextualAction(style: .normal, title: title) { [unowned self] _, _, isDone in
             storageManager.done(task, taskList) {
-                tableView.reloadData()
+                tableView.reloadSections(IndexSet(integersIn: 0...1), with: .automatic)
             }
             isDone(true)
         }
@@ -147,9 +147,3 @@ extension TasksViewController {
     }
     
 }
-//                let rowIndex = IndexPath(row: currentTasks.firstIndex(of: task) ?? 0, section: 0)
-//                tableView.beginUpdates()
-//                tableView.deleteRows(at: [rowIndex], with: .automatic)
-//                let newRowIndex = IndexPath(row: completedTasks.firstIndex(of: task) ?? 0, section: 1)
-//                tableView.insertRows(at: [newRowIndex], with: .automatic)
-//                tableView.endUpdates()
