@@ -57,7 +57,12 @@ final class TasksViewController: UITableViewController {
     
     // MARK: - UITableViewDelegate
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let task = taskList.tasks[indexPath.row]
+        let task: Task
+        if indexPath.section == 0 {
+            task = currentTasks[indexPath.row]
+        } else {
+            task = completedTasks[indexPath.row]
+        }
         
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [unowned self] _, _, _ in
             storageManager.delete(task)
@@ -72,13 +77,8 @@ final class TasksViewController: UITableViewController {
         }
         
         let doneAction = UIContextualAction(style: .normal, title: "Done") { [unowned self] _, _, isDone in
-            storageManager.done(task) { task in
-                let rowIndex = IndexPath(row: currentTasks.firstIndex(of: task) ?? 0, section: 0)
-                tableView.beginUpdates()
-                tableView.deleteRows(at: [rowIndex], with: .automatic)
-                let newRowIndex = IndexPath(row: completedTasks.firstIndex(of: task) ?? 0, section: 1)
-                tableView.insertRows(at: [newRowIndex], with: .automatic)
-                tableView.endUpdates()
+            storageManager.done(task, taskList) {
+                tableView.reloadData()
             }
             isDone(true)
         }
@@ -92,7 +92,13 @@ final class TasksViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let task = taskList.tasks[indexPath.row]
+        let task: Task
+        if indexPath.section == 0 {
+            task = currentTasks[indexPath.row]
+        } else {
+            task = completedTasks[indexPath.row]
+        }
+        
         showAlert(with: task) {
             tableView.reloadRows(at: [indexPath], with: .automatic)
         }
@@ -138,3 +144,9 @@ extension TasksViewController {
     }
     
 }
+//                let rowIndex = IndexPath(row: currentTasks.firstIndex(of: task) ?? 0, section: 0)
+//                tableView.beginUpdates()
+//                tableView.deleteRows(at: [rowIndex], with: .automatic)
+//                let newRowIndex = IndexPath(row: completedTasks.firstIndex(of: task) ?? 0, section: 1)
+//                tableView.insertRows(at: [newRowIndex], with: .automatic)
+//                tableView.endUpdates()
